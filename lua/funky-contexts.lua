@@ -25,6 +25,7 @@ local function load(context)
     local _, file = get_paths(context)
     -- TODO default mksession and sourcing might do too much (like restore global key mappings)
     vim.cmd("source " .. file)
+    vim.g.funky_context = table.concat(context, "/")
 end
 
 local function delete(context)
@@ -96,6 +97,11 @@ function M.list()
 end
 
 function M.setup()
+    -- this global variable mirrors the current context
+    -- (but it doesnt sync, you cannot set it to change the context)
+    -- useful to show the context in the status- or tabline
+    vim.g.funky_context = "."
+
     local ucom = vim.api.nvim_create_user_command
     ucom("CNewCopy", function(cmd)
         M.new_copy(cmd["args"])
